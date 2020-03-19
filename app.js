@@ -3,7 +3,6 @@ var express = require('express')
 var path = require('path')
 var cookieParser = require('cookie-parser')
 var logger = require('morgan')
-const expressJWT = require('express-jwt')
 
 const verifyToken = require('./middleware/verifyToken')
 var indexRouter = require('./routes/index')
@@ -20,7 +19,7 @@ app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
 
 // 验证token
-app.use(verifyToken)
+// app.use(verifyToken)
 
 app.use('/', indexRouter)
 app.use('/users', usersRouter)

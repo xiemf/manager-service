@@ -2,14 +2,17 @@ const pool = require('../db/pool')
 const page = params => {
   return new Promise((resolve, reject) => {
     pool.getConnection((err, connection) => {
-      connection.query('select * from t_user', (err, result) => {
-        if (err) {
-          reject(err)
-        } else {
-          resolve(JSON.parse(JSON.stringify(result)))
-        }
-        connection.release()
-      })
+      connection.query()
+      connection.query(
+        `select *,(select Count(*) from t_user) as TOTAL from t_user limit ${params.limit} offset ${params.offset}`,
+        (err, result) => {
+          if (err) {
+            reject(err)
+          } else {
+            resolve(JSON.parse(JSON.stringify(result)))
+          }
+          connection.release()
+        })
     })
   })
 }
