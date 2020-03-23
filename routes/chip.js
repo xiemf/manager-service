@@ -25,22 +25,22 @@ router.get('/page', async function (req, res, next) {
   }))
 
 });
-router.post('/add', async function (req, res, next) {
+router.post('/create', async function (req, res, next) {
   try {
     let chip = req.body
-    if (chip.pixel) {
-      chip.pixel = parseFloat(chip.pixel)
-      if (isNaN(chip.pixel)) {
-        res.status(400).send(createResult('', 102, 'Pixel must be an Number'))
-      }
-    }
-    let result = await ChipService.add(chip)
+    // if (chip.pixel) {
+    //   chip.pixel = parseFloat(chip.pixel)
+    //   if (isNaN(chip.pixel)) {
+    //     res.status(400).send(createResult('', 102, 'Pixel must be an Number'))
+    //   }
+    // }
+    let result = await ChipService.create(chip)
     res.send(createResult(result, 101, '新增成功'))
   } catch (e) {
     res.status(400).send(createError(e))
   }
 });
-router.put('/edit/:id', async function (req, res, next) {
+router.put('/update/:id', async function (req, res, next) {
   try {
     let id = req.params.id
     if (/[0-9]+/.test(id)) {
@@ -76,5 +76,14 @@ router.delete('/delete/:id', async function (req, res, next) {
     res.status(400).send(createError(e))
   }
 })
-
+router.get('/search', async function (req, res, next) {
+  let sensor  = req.query.sensor
+  let result = await ChipService.search(sensor)
+  res.send(createResult(result, 101, '查询成功'))
+})
+router.get('/validate', async function (req, res, next) {
+  let sensor  = req.query.sensor
+  let result = await ChipService.validate(sensor)
+  res.send(createResult(result, 101, '查询成功'))
+})
 module.exports = router;

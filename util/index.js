@@ -1,12 +1,27 @@
-module.exports.createError = (data) => {
-  if (data.name === 'SequelizeUniqueConstraintError') {
-    return {
-      code: 102,
-      message: data.errors[0].message
-    }
+module.exports.createError = data => {
+  let info = { code: 102 }
+  switch (data.name) {
+    case 'SequelizeDatabaseError':
+      info.message = data.parent.sqlMessage.match((/\'(.*?)\'/gi))[0]+' date type is error'
+      break
+    case 'SequelizeUniqueConstraintError':
+      info.message = data.errors[0].message
+      break
+    case 'SequelizeValidationError':
+      info.message = data.errors[0].message
+      break
+    default:
+      info.data = data
+      info.message = '请求错误'
   }
+  return info
+  // if (data.name === 'SequelizeUniqueConstraintError') {
+  //   return {
+  //     code: 102,
+  //     message: data.errors[0].message
+  //   }
+  // }
 }
-
 
 module.exports.createResult = (data, code = 101, message = '') => {
   return {
@@ -15,7 +30,6 @@ module.exports.createResult = (data, code = 101, message = '') => {
     message
   }
 }
-
 
 module.exports.createListResult = ({
   data,
@@ -44,6 +58,4 @@ module.exports.createListResult = ({
   }
 }
 
-exports.handleDate = (data, {floatKey}) => {
-
-}
+exports.handleDate = (data, { floatKey }) => {}

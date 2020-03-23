@@ -1,24 +1,12 @@
 const Models = require('../models/index')
-const Sequelize = require('sequelize');
+const Sequelize = require('sequelize')
 const Op = Sequelize.Op
-const FLOAT_KEY = ['FNO','FOV','TTL','FFL','maxCRA','MIC','EFL','IR','IH']
-const handleData = (data) => {
-  let result = {}
-  Object.keys(data).forEach(key => {
-    if (data[key] === '') {
-      return
-    }
-    if (FLOAT_KEY.includes(key)) {
-      result[key] = parseFloat(data[key])
-    }
-  })
-  return result
-}
+
+const ChipService = require('./ChipService')
+
 module.exports = {
-  page: async (query) => {
-    let {
-      limit = 10, offset = 0
-    } = query
+  page: async query => {
+    let { limit = 10, offset = 0 } = query
     let where = {}
     Object.keys(query).forEach(key => {
       if (query[key] === '') return
@@ -33,44 +21,43 @@ module.exports = {
       offset,
       where,
       include: [Models.Chip],
-      order: [
-        ['id', 'DESC']
-      ]
+      order: [['id', 'DESC']]
     })
     return product
   },
-  add: async (params) => {
+  create: async params => {
     let chipParams = params.chip
     delete params.chip
-    let hasChip = await Models.Chip.findOne({
-      where: {
-        sensor: chipParams.sensor
-      }
-    })
-    if (hasChip) {
-      params.chipId = hasChip.id
-      return Models.Product.create(params)
-    } else {
-      let newChip = await Models.Chip.create(chipParams)
-      params.chipId = newChip.id
-      return Models.Product.create(params)
-    }
-  },
-  update: async (params) => {
-    let chipParams = params.chip
-    delete params.chip
-    let hasChip = await Models.Chip.findOne({
-      where: {
-        sensor: chipParams.sensor
-      }
-    })
+    let hasChip = await ChipService.validate(chipParams.sensor)
     if (hasChip) {
       params.chipId = hasChip.id
     } else {
-      let newChip = await Models.Chip.create(chipParams)
+      let newChip = await ChipService.create(chipParams)
       params.chipId = newChip.id
     }
     return Models.Product.create(params)
-
+  },
+  detail: id => {
+    return Models.Product.findOne({ where: { id }, include: [Models.Chip] })
+  },
+  update: async (params, id) => {
+    console.log(id)
+    let chipParams = params.chip
+    delete params.chip
+    let hasChip = await ChipService.validate(chipParams.sensor)
+    if (hasChip) {
+      params.chipId = hasChip.id
+    } else {
+      let newChip = await ChipService.create(chipParams) //Models.Chip.create(chipParams)
+      params.chipId = newChip.id
+    }
+    return Models.Product.update(params, { where: { id } })
+  },
+  delete: (id) => {
+    return Models.Product.destroy({
+      where: {
+        id
+      }
+    })
   }
 }

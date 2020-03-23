@@ -13,6 +13,12 @@ const Product = sequelize.define('product', {
   },
   partNO: { // 物料号
     type: Sequelize.STRING(50),
+    allowNull: false,
+    unique: true
+  },
+  opticalSystem:{
+    type: Sequelize.STRING(50),
+    comment: '光学系统'
   },
   background: { // 背景
     type: Sequelize.STRING(255),
