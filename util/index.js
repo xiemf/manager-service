@@ -1,0 +1,49 @@
+module.exports.createError = (data) => {
+  if (data.name === 'SequelizeUniqueConstraintError') {
+    return {
+      code: 102,
+      message: data.errors[0].message
+    }
+  }
+}
+
+
+module.exports.createResult = (data, code = 101, message = '') => {
+  return {
+    code,
+    data,
+    message
+  }
+}
+
+
+module.exports.createListResult = ({
+  data,
+  code = 101,
+  total,
+  offset = 0,
+  limit = 10,
+  message
+}) => {
+  let hasPrePage, hasNextPage, pageNum
+  hasPrePage = offset - limit > 0
+  hasNextPage = offset < total
+  pageNum = Math.ceil((offset + 1) / limit)
+  console.log(offset + 1)
+  console.log(limit)
+  return {
+    code,
+    data,
+    total,
+    offset,
+    limit,
+    hasPrePage,
+    hasNextPage,
+    pageNum,
+    message
+  }
+}
+
+exports.handleDate = (data, {floatKey}) => {
+
+}

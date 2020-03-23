@@ -1,9 +1,9 @@
 var express = require('express')
 var router = express.Router()
-const UserService = require('../controllers/UserService')
+const UserService = require('../api/UserService')
 const {
   createResult
-} = require('../util/createResult')
+} = require('../util')
 const jwt = require('jsonwebtoken')
 const {
   privateKey,

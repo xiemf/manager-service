@@ -5,9 +5,12 @@ var cookieParser = require('cookie-parser')
 var logger = require('morgan')
 
 const verifyToken = require('./middleware/verifyToken')
+const parseQuery = require('./middleware/parseQuery')
+
 var indexRouter = require('./routes/index')
 var usersRouter = require('./routes/users')
-
+const chipRouter = require('./routes/chip')
+const productRouter = require('./routes/product')
 var app = express()
 
 // view engine setup
@@ -20,10 +23,12 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 // 验证token
 // app.use(verifyToken)
+app.use(parseQuery)
 
 app.use('/', indexRouter)
 app.use('/users', usersRouter)
-
+app.use('/chip', chipRouter)
+app.use('/product', productRouter)
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404))

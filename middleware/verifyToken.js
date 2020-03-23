@@ -1,5 +1,5 @@
 const ignorePath = ['/users/login']
-const { createResult } = require('../util/createResult')
+const { createResult } = require('../util')
 const { privateKey } = require('../config/jwt')
 const jwt = require('jsonwebtoken')
 module.exports = function (req, res, next) {

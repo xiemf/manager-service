@@ -1,0 +1,80 @@
+var express = require('express');
+var router = express.Router();
+
+const ChipService = require('../api/ChipService')
+const {
+  createError,
+  createResult,
+  createListResult
+} = require('../util')
+/* GET home page. */
+router.get('/page', async function (req, res, next) {
+  let {
+    offset = 0,
+      limit = 10
+  } = req.query
+
+  let result = await ChipService.page(req.query)
+  let data = result.rows
+  let total = result.count
+  res.send(createListResult({
+    data,
+    total,
+    offset,
+    limit
+  }))
+
+});
+router.post('/add', async function (req, res, next) {
+  try {
+    let chip = req.body
+    if (chip.pixel) {
+      chip.pixel = parseFloat(chip.pixel)
+      if (isNaN(chip.pixel)) {
+        res.status(400).send(createResult('', 102, 'Pixel must be an Number'))
+      }
+    }
+    let result = await ChipService.add(chip)
+    res.send(createResult(result, 101, '新增成功'))
+  } catch (e) {
+    res.status(400).send(createError(e))
+  }
+});
+router.put('/edit/:id', async function (req, res, next) {
+  try {
+    let id = req.params.id
+    if (/[0-9]+/.test(id)) {
+      id = parseInt(id)
+      let chip = req.body
+      delete chip.id
+      if (chip.pixel) {
+        chip.pixel = parseFloat(chip.pixel)
+        if (isNaN(chip.pixel)) {
+          res.status(400).send(createResult('', 102, 'Pixel must be an Number'))
+        }
+      }
+      let result = await ChipService.update(chip, id)
+      res.send(createResult(result, 101, '修改成功'))
+    } else {
+      res.status(400).send(createResult('', 102, 'id must be an Number'))
+    }
+  } catch (e) {
+    res.status(400).send(createError(e))
+  }
+})
+router.delete('/delete/:id', async function (req, res, next) {
+  try {
+    let id = req.params.id
+    if (/[0-9]+/.test(id)) {
+      id = parseInt(id)
+      let result = await ChipService.delete(id)
+      res.send(createResult(result, 101, '删除成功'))
+    } else {
+      res.status(400).send(createResult('', 102, 'id must be an Number'))
+    }
+  } catch (e) {
+    res.status(400).send(createError(e))
+  }
+})
+
+module.exports = router;
