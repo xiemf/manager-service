@@ -14,6 +14,7 @@ const productRouter = require('./routes/product')
 const projectRouter = require('./routes/project')
 const developmentRouter = require('./routes/development')
 const testRouter = require('./routes/test')
+const roleRouter = require('./routes/role')
 var app = express()
 
 // view engine setup
@@ -25,7 +26,7 @@ app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
 
 // 验证token
-// app.use(verifyToken)
+app.use(verifyToken)
 app.use(parseQuery)
 
 app.use('/', indexRouter)
@@ -35,6 +36,7 @@ app.use('/product', productRouter)
 app.use('/project', projectRouter)
 app.use('/development', developmentRouter)
 app.use('/test', testRouter)
+app.use('/role', roleRouter)
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {})
 

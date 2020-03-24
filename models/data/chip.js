@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize')
-const sequelize = require('../db/sequelize')
+const sequelize = require('../../db/sequelize')
 const Chip = sequelize.define('chip',{
   id:{
     type:Sequelize.BIGINT(11),

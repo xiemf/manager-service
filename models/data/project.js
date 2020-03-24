@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize')
-const sequelize = require('../db/sequelize')
+const sequelize = require('../../db/sequelize')
 
 const Project = sequelize.define('project', {
   id: {
