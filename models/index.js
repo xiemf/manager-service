@@ -2,6 +2,7 @@ const Product = require('./product')
 const Chip = require('./chip')
 const Project = require('./project')
 const Development = require('./development')
+const Test = require('./test')
 
 const sequelize = require('../db/sequelize')
 
@@ -12,10 +13,11 @@ module.exports = {
   Product,
   Chip,
   Project,
-  Development
+  Development,
+  Test
 }
 
 
-// sequelize.sync({ alter: true }).then(res => {
-//   console.log('数据库表同步成功！')
-// })
+sequelize.sync({ alter: true }).then(res => {
+  console.log('数据库表同步成功！')
+})

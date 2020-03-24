@@ -13,6 +13,7 @@ const chipRouter = require('./routes/chip')
 const productRouter = require('./routes/product')
 const projectRouter = require('./routes/project')
 const developmentRouter = require('./routes/development')
+const testRouter = require('./routes/test')
 var app = express()
 
 // view engine setup
@@ -33,6 +34,7 @@ app.use('/chip', chipRouter)
 app.use('/product', productRouter)
 app.use('/project', projectRouter)
 app.use('/development', developmentRouter)
+app.use('/test', testRouter)
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {})
 

@@ -10,7 +10,10 @@ module.exports = {
     if(query.createYear){
       where.createYear = query.createYear
     }
-    let order = [['id', 'DESC']]
+    if(query.partNo){
+      where.productPartNo = query.partNo
+    }
+    let order = [['createYear','DESC'],['No', 'DESC']]
     let projectList = await Models.Development.findAndCountAll({
       limit,
       offset,
@@ -22,9 +25,9 @@ module.exports = {
   create: async params => {
     // 格式化时间
     delete params.id
-    let createTime = new Date(params.createTime)
-    params.createYear = createTime.getFullYear() // 获取年份
-    params.createTime = createTime.getTime()
+    let projectCreateTime = new Date(params.projectCreateTime)
+    params.createYear = projectCreateTime.getFullYear() // 获取年份
+    params.projectCreateTime = projectCreateTime.getTime()
     Object.keys(params).forEach(key => {
       if (params[key] === '') return
       if (TIME_KEYS.includes(key)) {
@@ -32,13 +35,16 @@ module.exports = {
       }
     })
     params.No = await buildNo(params.createYear)
+    let development = await Models.Development.build(params)
+    console.log(development)
     return Models.Development.create(params)
   },
  
   update: async (params, id) => {
     delete params.id
-    let createTime = new Date(params.createTime)
-    params.createYear = createTime.getFullYear() // 获取年份
+    let projectCreateTime = new Date(params.projectCreateTime)
+    params.createYear = projectCreateTime.getFullYear() // 获取年份
+    params.projectCreateTime = projectCreateTime.getTime()
     Object.keys(params).forEach(key => {
       if (params[key] === '') return
       if (TIME_KEYS.includes(key)) {

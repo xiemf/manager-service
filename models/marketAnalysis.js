@@ -6,7 +6,7 @@ const marketAnalysis = {
       type: '前置',
       apply: '主摄',
       specification: '32M',
-      outPortNo: 'L50266A', // 外部料号
+      outPartNo: 'L50266A', // 外部料号
       analyze: 'L50266A',
       noAnalyze: '',
       remark: '上海华为',
@@ -41,7 +41,7 @@ const marketAnalysis = {
       type: '后置',
       apply: '广角',
       specification: '40M',
-      outPortNo: '60079A1', // 外部料号
+      outPartNo: '60079A1', // 外部料号
       analyze: 'L60079',
       noAnalyze: '',
       remark: '上海华为',
@@ -76,7 +76,7 @@ const marketAnalysis = {
       type: '后置',
       apply: '超广角',
       specification: '16M',
-      outPortNo: '39128A', // 外部料号
+      outPartNo: '39128A', // 外部料号
       analyze: 'L60116',
       noAnalyze: 'KT8607',
       remark: '上海华为',
@@ -111,7 +111,7 @@ const marketAnalysis = {
       type: '后置',
       apply: '长焦',
       specification: '8M',
-      outPortNo: '50204A1', // 外部料号
+      outPartNo: '50204A1', // 外部料号
       analyze: 'L50204A1',
       noAnalyze: '',
       remark: '上海华为',
