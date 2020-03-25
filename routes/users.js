@@ -1,24 +1,20 @@
 var express = require('express')
 var router = express.Router()
 const UserService = require('../api/UserService')
-const {
-  createError,
-  createResult,
-  createListResult
-} = require('../util')
+const { createError, createResult, createListResult } = require('../util')
+const verifyPrivilege = require('../util/verifyPrivilege')
 const jwt = require('jsonwebtoken')
-const {
-  privateKey,
-  expiresIn
-} = require('../config/jwt')
+const { privateKey, expiresIn } = require('../config/jwt')
+
+/**
+ * baseUrl users
+ */
 
 router.post('/login', function (req, res, next) {
-  UserService.login(req.body).then(result => {
+  UserService.login(req.body).then(async result => {
     if (result) {
-      let content = {
-        userId: result.id,
-        username: result.username
-      }
+      let privileges = await UserService.userPrivilege(result.id)
+      let content = { userId: result.id, username: result.username, privileges }
       let token = jwt.sign(content, privateKey, {
         expiresIn
       }) //有效期
@@ -30,46 +26,37 @@ router.post('/login', function (req, res, next) {
 })
 router.get('/info', function (req, res, next) {
   let token = req.get('SUNNY-TOKEN')
-  jwt.verify(token, privateKey, (err, decoded) => {
-    res.send(createResult(decoded, 101))
+  jwt.verify(token, privateKey, async(err, decoded) => {
+    let user = await UserService.detail(decoded.userId)
+    res.send(createResult(user, 101, '查询成功'))
   })
 })
-router.get('/role/list',async function(req,res,next){
-  let id = req.query.id
-  let user = await UserService.detail(id)
-  let roles = await user.getRoles()
-  console.log(roles)
-  res.send(createResult(roles, 101))
-})
-router.post('/role/save',async function(req,res,next){
-  let id = req.body.id
-  let roleIdList = req.body.roleIdList
-  let user = await UserService.detail(id)
-  console.log(user)
-  let roles = await user.setRoles(roleIdList)
-  console.log(roles)
-  res.send(createResult(roles, 101,'配置成功'))
+router.get('/privilege', function (req, res, next) {
+  let token = req.get('SUNNY-TOKEN')
+  jwt.verify(token, privateKey, async(err, decoded) => {
+    let privilege = await UserService.userPrivilege(decoded.userId)
+    res.send(createResult(privilege, 101, '查询成功'))
+  })
 })
 router.get('/page', async function (req, res, next) {
-  let {
-    offset = 0,
-      limit = 10
-  } = req.query
-
+  await verifyPrivilege('1020200000', req, res)
+  let { offset = 0, limit = 10 } = req.query
   let result = await UserService.page(req.query)
   let data = result.rows
   let total = result.count
-  res.send(createListResult({
-    data,
-    total,
-    offset,
-    limit
-  }))
-
+  res.send(
+    createListResult({
+      data,
+      total,
+      offset,
+      limit
+    })
+  )
 })
 
 router.post('/create', async function (req, res, next) {
   try {
+    await verifyPrivilege('1020200002', req, res)
     let user = req.body
     let result = await UserService.create(user)
     res.send(createResult(result, 101, '新增成功'))
@@ -79,21 +66,22 @@ router.post('/create', async function (req, res, next) {
 })
 router.put('/update/:id', async function (req, res, next) {
   try {
-    console.log('update')
+    await verifyPrivilege('1020200003', req, res)
     let id = parseInt(req.params.id)
     if (isNaN(id)) {
       res.status(400).send(createResult('', 102, 'id must be an Number'))
     }
     let user = req.body
     delete user.id
-    let result = await UserService.update(user,id)
+    let result = await UserService.update(user, id)
     res.send(createResult(result, 101, '编辑成功'))
   } catch (e) {
     res.status(400).send(createError(e))
   }
 })
-router.delete('/freeze/:id', async function (req, res, next) {
+router.put('/freeze/:id', async function (req, res, next) {
   try {
+    await verifyPrivilege('1020200005', req, res)
     let id = req.params.id
     if (/[0-9]+/.test(id)) {
       id = parseInt(id)
@@ -106,5 +94,26 @@ router.delete('/freeze/:id', async function (req, res, next) {
     res.status(400).send(createError(e))
   }
 })
-
+router.put('/thaw/:id', async function (req, res, next) {
+  try {
+    await verifyPrivilege('1020200006', req, res)
+    let id = req.params.id
+    if (/[0-9]+/.test(id)) {
+      id = parseInt(id)
+      let result = await UserService.thaw(id)
+      res.send(createResult(result, 101, '启用成功'))
+    } else {
+      res.status(400).send(createResult('', 102, 'id must be an Number'))
+    }
+  } catch (e) {
+    res.status(400).send(createError(e))
+  }
+})
+router.get('/userPrivilege', async function (req, res, next) {
+  await verifyPrivilege('1020200007', req, res)
+  let id = req.query.id
+  id = parseInt(id)
+  let privilege = await UserService.userPrivilege(id)
+  res.send(createResult(privilege))
+})
 module.exports = router

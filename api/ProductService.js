@@ -41,7 +41,6 @@ module.exports = {
     return Models.Product.findOne({ where: { id }, include: [Models.Chip] })
   },
   update: async (params, id) => {
-    console.log(id)
     let chipParams = params.chip
     delete params.chip
     let hasChip = await ChipService.validate(chipParams.sensor)

@@ -15,12 +15,6 @@ module.exports.createError = data => {
       info.message = '请求错误'
   }
   return info
-  // if (data.name === 'SequelizeUniqueConstraintError') {
-  //   return {
-  //     code: 102,
-  //     message: data.errors[0].message
-  //   }
-  // }
 }
 
 module.exports.createResult = (data, code = 101, message = '') => {
@@ -30,7 +24,6 @@ module.exports.createResult = (data, code = 101, message = '') => {
     message
   }
 }
-
 module.exports.createListResult = ({
   data,
   code = 101,
@@ -43,8 +36,6 @@ module.exports.createListResult = ({
   hasPrePage = offset - limit > 0
   hasNextPage = offset < total
   pageNum = Math.ceil((offset + 1) / limit)
-  console.log(offset + 1)
-  console.log(limit)
   return {
     code,
     data,
@@ -58,4 +49,3 @@ module.exports.createListResult = ({
   }
 }
 
-exports.handleDate = (data, { floatKey }) => {}

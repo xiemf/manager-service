@@ -33,7 +33,6 @@ module.exports = {
     })
     delete params.id
     params.version = await buildVersion(params.productPartNo)
-    console.log(params)
     return Models.Test.create(params)
   },
 

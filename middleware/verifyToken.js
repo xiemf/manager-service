@@ -11,9 +11,9 @@ module.exports = function (req, res, next) {
       if (err) {
         res.status(401)
         if ((err.name = 'JsonWebTokenError')) {
-          res.send(createResult(err, 109, '用户未登录'))
+          res.send(createResult('', 109, '用户未登录'))
         } else {
-          res.send(createResult(err, 110, '登录已过期'))
+          res.send(createResult('', 110, '登录已过期'))
         }
       } else {
         next()

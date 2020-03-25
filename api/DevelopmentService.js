@@ -36,7 +36,6 @@ module.exports = {
     })
     params.No = await buildNo(params.createYear)
     let development = await Models.Development.build(params)
-    console.log(development)
     return Models.Development.create(params)
   },
  

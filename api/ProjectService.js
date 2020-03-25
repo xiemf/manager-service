@@ -93,7 +93,6 @@ const buildRecordNo = async (Year, Month) => {
   } else {
     recordNoNo = '' + maxNo
   }
-  console.log(`${recordNoYear}${recordNoMonth}-${recordNoNo}`)
   // let recordNoNo =
   return `${recordNoYear}${recordNoMonth}-${recordNoNo}`
 }

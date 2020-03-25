@@ -13,12 +13,13 @@ const User = require('./account/user')
 const Role = require('./account/role')
 const UserRole = require('./account/userRole')
 const Privilege = require('./account/privilege')
+const RolePrivilege = require('./account/rolePrivilege')
 
-User.belongsToMany(Role, { through: UserRole });
-Role.belongsToMany(User, { through: UserRole });
+User.belongsToMany(Role, { through: UserRole })
+Role.belongsToMany(User, { through: UserRole })
 
-
-
+Role.belongsToMany(Privilege, { through: RolePrivilege })
+Privilege.belongsToMany(Role, { through: RolePrivilege })
 
 module.exports = {
   Product,
@@ -29,7 +30,8 @@ module.exports = {
   User,
   Role,
   UserRole,
-  Privilege
+  Privilege,
+  RolePrivilege
 }
 
 // const sequelize = require('../db/sequelize')

@@ -3,7 +3,7 @@ const Sequelize = require('sequelize')
 const Op = Sequelize.Op
 
 module.exports = {
-  list:()=>{
+  list: () => {
     return Models.Role.findAll()
   },
   page: query => {
@@ -13,8 +13,20 @@ module.exports = {
       limit,
       offset,
       where,
+      // include: [
+      //   {
+      //     model: Models.Privilege,
+      //     attributes: ['id','name','code'],
+      //     through:{
+      //       attributes:[]
+      //     }
+      //   }
+      // ],
       order: [['id', 'DESC']]
     })
+  },
+  detail: id => {
+    return Models.Role.findOne({ where: { id } })
   },
   create: chip => {
     delete chip.id
@@ -32,6 +44,22 @@ module.exports = {
       where: {
         id
       }
+    })
+  },
+  listByRoleIds: (roleIds) => {
+    return Models.Role.findAll({
+      where: {
+        id: roleIds
+      },
+      include: [
+        {
+          model: Models.Privilege,
+          attributes: ['id', 'name', 'code'],
+          through: {
+            attributes: []
+          }
+        }
+      ]
     })
   }
 }
