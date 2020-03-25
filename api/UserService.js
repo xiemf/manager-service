@@ -28,6 +28,7 @@ module.exports = {
     })
     params.password = md5(params.password)
     delete params.id
+    delete params.freeze
     return Models.User.create(params)
   },
   login: async params => {

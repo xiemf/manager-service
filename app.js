@@ -26,7 +26,7 @@ app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
 
 // 验证token
-app.use(verifyToken)
+// app.use(verifyToken)
 app.use(parseQuery)
 
 app.use('/', indexRouter)

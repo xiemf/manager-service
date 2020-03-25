@@ -32,7 +32,7 @@ module.exports = {
   Privilege
 }
 
-const sequelize = require('../db/sequelize')
-sequelize.sync({ alter: true }).then(res => {
-  console.log('数据库表同步成功！')
-})
+// const sequelize = require('../db/sequelize')
+// sequelize.sync({ alter: true }).then(res => {
+//   console.log('数据库表同步成功！')
+// })

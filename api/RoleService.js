@@ -3,6 +3,9 @@ const Sequelize = require('sequelize')
 const Op = Sequelize.Op
 
 module.exports = {
+  list:()=>{
+    return Models.Role.findAll()
+  },
   page: query => {
     let { limit = 10, offset = 0 } = query
     let where = {}

@@ -34,6 +34,22 @@ router.get('/info', function (req, res, next) {
     res.send(createResult(decoded, 101))
   })
 })
+router.get('/role/list',async function(req,res,next){
+  let id = req.query.id
+  let user = await UserService.detail(id)
+  let roles = await user.getRoles()
+  console.log(roles)
+  res.send(createResult(roles, 101))
+})
+router.post('/role/save',async function(req,res,next){
+  let id = req.body.id
+  let roleIdList = req.body.roleIdList
+  let user = await UserService.detail(id)
+  console.log(user)
+  let roles = await user.setRoles(roleIdList)
+  console.log(roles)
+  res.send(createResult(roles, 101,'配置成功'))
+})
 router.get('/page', async function (req, res, next) {
   let {
     offset = 0,

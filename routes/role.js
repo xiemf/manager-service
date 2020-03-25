@@ -24,7 +24,10 @@ router.get('/page', async function (req, res, next) {
   }))
 
 })
-
+router.get('/list',async function(req,res,next){
+  let role = await RoleService.list()
+  res.send(createResult(role, 101))
+})
 router.post('/create', async function (req, res, next) {
   try {
     let user = req.body
