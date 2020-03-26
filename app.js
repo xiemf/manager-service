@@ -17,12 +17,15 @@ const roleRouter = require('./routes/role')
 const userRoleRouter = require('./routes/userRole')
 const privilegeRouter = require('./routes/privilege')
 const rolePrivilegeRouter = require('./routes/rolePrivilege')
+const importRouter = require('./routes/import')
+const uploadRouter = require('./routes/upload')
 
 const { createError, createResult } = require('./util')
 var app = express()
 
-// view engine setup
+// app.use(express.static(path.join(__dirname, 'upload_tmp')))
 
+// view engine setup
 app.use(logger('dev'))
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
@@ -30,9 +33,10 @@ app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
 
 // 验证token
+app.use('/upload', uploadRouter)
+
 app.use(verifyToken)
 app.use(parseQuery)
-
 app.use('/', indexRouter)
 app.use('/users', usersRouter)
 app.use('/chip', chipRouter)
@@ -44,6 +48,7 @@ app.use('/role', roleRouter)
 app.use('/userRole', userRoleRouter)
 app.use('/privilege', privilegeRouter)
 app.use('/rolePrivilege', rolePrivilegeRouter)
+app.use('/import', importRouter)
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   res.status(404)
