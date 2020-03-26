@@ -1,5 +1,6 @@
 var express = require('express')
 var router = express.Router()
+
 const UserService = require('../api/UserService')
 const { createError, createResult, createListResult } = require('../util')
 const verifyPrivilege = require('../util/verifyPrivilege')
@@ -24,16 +25,33 @@ router.post('/login', function (req, res, next) {
     }
   })
 })
-router.get('/info', function (req, res, next) {// 获取自身信息
+router.get('/info', function (req, res, next) {
+  // 获取自身信息
   let token = req.get('SUNNY-TOKEN')
-  jwt.verify(token, privateKey, async(err, decoded) => {
+  jwt.verify(token, privateKey, async (err, decoded) => {
     let user = await UserService.detail(decoded.userId)
     res.send(createResult(user, 101, '查询成功'))
   })
 })
-router.get('/privilege', function (req, res, next) { // 获取自身权限
+router.put('/update/password', function (req, res, next) {
+  // 获取自身信息
   let token = req.get('SUNNY-TOKEN')
-  jwt.verify(token, privateKey, async(err, decoded) => {
+  let password = req.body.password
+  let newPassword = req.body.newPassword
+  jwt.verify(token, privateKey, async (err, decoded) => {
+    let user = await UserService.validPassword(password,decoded.userId)
+    if (user) {
+      await UserService.updatePassword(newPassword,decoded.userId)
+      res.send(createResult('', 101, '修改密码成功'))
+    } else {
+      res.send(createResult('', 102, '原密码错误'))
+    }
+  })
+})
+router.get('/privilege', function (req, res, next) {
+  // 获取自身权限
+  let token = req.get('SUNNY-TOKEN')
+  jwt.verify(token, privateKey, async (err, decoded) => {
     let privilege = await UserService.userPrivilege(decoded.userId)
     res.send(createResult(privilege, 101, '查询成功'))
   })

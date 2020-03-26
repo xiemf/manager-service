@@ -77,6 +77,14 @@ module.exports = {
     })
     return Models.User.update(params, { where: { id } })
   },
+  validPassword: async (password, id) => {
+    password = md5(password)
+    return Models.User.findOne({ where: { id, password }, attributes: { exclude: ['password'] } })
+  },
+  updatePassword: async (password, id) => {
+    password = md5(password)
+    return Models.User.update({ password }, { where: { id } })
+  },
   detail: id => {
     return Models.User.findOne({
       where: { id },
@@ -105,8 +113,8 @@ module.exports = {
   },
   userPrivilege: async id => {
     try {
-      let user = await Models.User.findOne({ where: { id }})
-      if(user.dataValues.username === 'admin'){
+      let user = await Models.User.findOne({ where: { id } })
+      if (user.dataValues.username === 'admin') {
         let result = await PrivilegeService.list()
         return result
       }
@@ -115,7 +123,10 @@ module.exports = {
       let rolePrivilegeRes = await RoleService.listByRoleIds(roleIds)
       let privilegeRes = rolePrivilegeRes.map(v => v.dataValues.privileges)
       privilegeRes = flatData(privilegeRes)
-      let privilege = noRepeatArr(privilegeRes.map(v => v.dataValues),'id')
+      let privilege = noRepeatArr(
+        privilegeRes.map(v => v.dataValues),
+        'id'
+      )
       return privilege
     } catch (e) {
       throw e
