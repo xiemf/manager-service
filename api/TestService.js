@@ -44,7 +44,7 @@ module.exports = {
         params[key] = new Date(params[key]).getTime()
       }
     })
-    params.version = await buildVersion(params.productPartNo)
+    // params.version = await buildVersion(params.productPartNo)
     return Models.Test.update(params, { where: { id } })
   },
   detail: id => {

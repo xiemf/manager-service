@@ -39,7 +39,7 @@ router.get('/privilege', function (req, res, next) {
   })
 })
 router.get('/page', async function (req, res, next) {
-  await verifyPrivilege('1020200000', req, res)
+  await verifyPrivilege('1020200100', req, res)
   let { offset = 0, limit = 10 } = req.query
   let result = await UserService.page(req.query)
   let data = result.rows
@@ -56,7 +56,7 @@ router.get('/page', async function (req, res, next) {
 
 router.post('/create', async function (req, res, next) {
   try {
-    await verifyPrivilege('1020200002', req, res)
+    await verifyPrivilege('1020200102', req, res)
     let user = req.body
     let result = await UserService.create(user)
     res.send(createResult(result, 101, '新增成功'))
@@ -66,7 +66,7 @@ router.post('/create', async function (req, res, next) {
 })
 router.put('/update/:id', async function (req, res, next) {
   try {
-    await verifyPrivilege('1020200003', req, res)
+    await verifyPrivilege('1020200103', req, res)
     let id = parseInt(req.params.id)
     if (isNaN(id)) {
       res.status(400).send(createResult('', 102, 'id must be an Number'))
@@ -81,7 +81,7 @@ router.put('/update/:id', async function (req, res, next) {
 })
 router.put('/freeze/:id', async function (req, res, next) {
   try {
-    await verifyPrivilege('1020200005', req, res)
+    await verifyPrivilege('1020200105', req, res)
     let id = req.params.id
     if (/[0-9]+/.test(id)) {
       id = parseInt(id)
@@ -96,7 +96,7 @@ router.put('/freeze/:id', async function (req, res, next) {
 })
 router.put('/thaw/:id', async function (req, res, next) {
   try {
-    await verifyPrivilege('1020200006', req, res)
+    await verifyPrivilege('1020200106', req, res)
     let id = req.params.id
     if (/[0-9]+/.test(id)) {
       id = parseInt(id)
@@ -110,7 +110,7 @@ router.put('/thaw/:id', async function (req, res, next) {
   }
 })
 router.get('/userPrivilege', async function (req, res, next) {
-  await verifyPrivilege('1020200007', req, res)
+  await verifyPrivilege('1020200107', req, res)
   let id = req.query.id
   id = parseInt(id)
   let privilege = await UserService.userPrivilege(id)

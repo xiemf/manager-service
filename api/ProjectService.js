@@ -42,18 +42,17 @@ module.exports = {
  
   update: async (params, id) => {
     delete params.id
-    let createTime = new Date(params.createTime)
-    params.createYear = createTime.getFullYear() // 获取年份
-    params.createMonth = createTime.getMonth() + 1 // 获取月份
-    params.createTime = createTime.getTime()
+    delete params.createTime
     Object.keys(params).forEach(key => {
       if (params[key] === '') return
       if (['TSEndTime', 'ESEndTime', 'DRTime'].includes(key)) {
         params[key] = new Date(params[key]).getTime()
       }
     })
-    params.No = await buildNo(params.createYear)
-    params.recordNo = await buildRecordNo(params.createYear, params.createMonth)
+    delete params.No
+    delete params.recordNo
+    // params.No = await buildNo(params.createYear)
+    // params.recordNo = await buildRecordNo(params.createYear, params.createMonth)
     return Models.Project.update(params, { where: { id } })
   },
   detail: id => {

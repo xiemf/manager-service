@@ -48,4 +48,3 @@ module.exports.createListResult = ({
     message
   }
 }
-
