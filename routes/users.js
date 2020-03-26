@@ -13,8 +13,8 @@ const { privateKey, expiresIn } = require('../config/jwt')
 router.post('/login', function (req, res, next) {
   UserService.login(req.body).then(async result => {
     if (result) {
-      let privileges = await UserService.userPrivilege(result.id)
-      let content = { userId: result.id, username: result.username, privileges }
+      // let privileges = await UserService.userPrivilege(result.id)
+      let content = { userId: result.id, username: result.username }
       let token = jwt.sign(content, privateKey, {
         expiresIn
       }) //有效期
