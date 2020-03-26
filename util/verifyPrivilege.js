@@ -13,10 +13,10 @@ module.exports = function (code, req, res) {
           resolve()
         } else {
           res.status(403).send(createResult(req.path, 0, '权限不足'))
-          reject()
+          resolve()
         }
       }).catch(err => {
-        reject(err)
+        reject()
       })
     })
   })

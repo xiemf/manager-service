@@ -1,5 +1,7 @@
 var express = require('express')
 var router = express.Router()
+const verifyPrivilege = require('../util/verifyPrivilege')
+
 const ProductService = require('../api/ProductService')
 const { createResult, createListResult, createError } = require('../util')
 /* GET */

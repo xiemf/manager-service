@@ -1,5 +1,7 @@
 var express = require('express')
 var router = express.Router()
+const verifyPrivilege = require('../util/verifyPrivilege')
+
 const PrivilegeService = require('../api/PrivilegeService')
 const { createResult, createListResult, createError } = require('../util')
 const { treeData } = require('../util/handleData')

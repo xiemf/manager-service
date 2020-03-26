@@ -1,5 +1,6 @@
 var express = require('express')
 var router = express.Router()
+const verifyPrivilege = require('../util/verifyPrivilege')
 
 const ChipService = require('../api/ChipService')
 const { createError, createResult, createListResult } = require('../util')
