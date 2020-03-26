@@ -107,8 +107,8 @@ module.exports = {
     try {
       let user = await Models.User.findOne({ where: { id }})
       if(user.dataValues.username === 'admin'){
-        let privilege = await PrivilegeService.list()
-        return privilege.dataValues
+        let result = await PrivilegeService.list()
+        return result
       }
       let roleRes = await user.getRoles()
       let roleIds = roleRes.map(v => v.dataValues.id)
