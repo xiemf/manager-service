@@ -5,6 +5,7 @@ const TestService = require('../api/TestService')
 const { createResult, createListResult, createError } = require('../util')
 /* GET */
 router.get('/page', async function (req, res, next) {
+  await verifyPrivilege('1120200400', req, res)
   let { offset = 0, limit = 10 } = req.query
   let result = await TestService.page(req.query)
   let data = result.rows
@@ -19,6 +20,7 @@ router.get('/page', async function (req, res, next) {
   )
 })
 router.get('/:id', async function (req, res, next) {
+  await verifyPrivilege('1120200400', req, res)
   let id = parseInt(req.params.id)
   if (isNaN(id)) {
     res.status(400).send(createResult('', 102, 'id must be an Number'))
@@ -28,6 +30,7 @@ router.get('/:id', async function (req, res, next) {
 })
 router.post('/create', async function (req, res, next) {
   try {
+    await verifyPrivilege('1120200402', req, res)
     let test = req.body
     let result = await TestService.create(test)
     res.send(createResult(result, 101, '新增成功'))
@@ -37,6 +40,7 @@ router.post('/create', async function (req, res, next) {
 })
 router.put('/update/:id', async function (req, res, next) {
   try {
+    await verifyPrivilege('1120200403', req, res)
     let id = parseInt(req.params.id)
     if (isNaN(id)) {
       res.status(400).send(createResult('', 102, 'id must be an Number'))
@@ -51,6 +55,7 @@ router.put('/update/:id', async function (req, res, next) {
 })
 router.delete('/delete/:id', async function (req, res, next) {
   try {
+    await verifyPrivilege('1120200404', req, res)
     let id = req.params.id
     if (/[0-9]+/.test(id)) {
       id = parseInt(id)

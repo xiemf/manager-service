@@ -24,14 +24,14 @@ router.post('/login', function (req, res, next) {
     }
   })
 })
-router.get('/info', function (req, res, next) {
+router.get('/info', function (req, res, next) {// 获取自身信息
   let token = req.get('SUNNY-TOKEN')
   jwt.verify(token, privateKey, async(err, decoded) => {
     let user = await UserService.detail(decoded.userId)
     res.send(createResult(user, 101, '查询成功'))
   })
 })
-router.get('/privilege', function (req, res, next) {
+router.get('/privilege', function (req, res, next) { // 获取自身权限
   let token = req.get('SUNNY-TOKEN')
   jwt.verify(token, privateKey, async(err, decoded) => {
     let privilege = await UserService.userPrivilege(decoded.userId)

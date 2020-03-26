@@ -4,8 +4,9 @@ const ProductService = require('../api/ProductService')
 const { createResult, createListResult, createError } = require('../util')
 /* GET */
 router.get('/page', async function (req, res, next) {
-  let { offset = 0, limit = 10 } = req.query
+  await verifyPrivilege('1120200200', req, res)
 
+  let { offset = 0, limit = 10 } = req.query
   let result = await ProductService.page(req.query)
   let data = result.rows
   let total = result.count
@@ -19,6 +20,7 @@ router.get('/page', async function (req, res, next) {
   )
 })
 router.get('/:id', async function (req, res, next) {
+  await verifyPrivilege('1120200200', req, res)
   let id = parseInt(req.params.id)
   if (isNaN(id)) {
     res.status(400).send(createResult('', 102, 'id must be an Number'))
@@ -27,6 +29,7 @@ router.get('/:id', async function (req, res, next) {
   res.send(createResult(result, 101, '查询成功'))
 })
 router.post('/create', async function (req, res, next) {
+  await verifyPrivilege('1120200202', req, res)
   try {
     let product = req.body
     let result = await ProductService.create(product)
@@ -37,6 +40,7 @@ router.post('/create', async function (req, res, next) {
 })
 router.put('/update/:id', async function (req, res, next) {
   try {
+  await verifyPrivilege('1120200203', req, res)
     let id = parseInt(req.params.id)
     if (isNaN(id)) {
       res.status(400).send(createResult('', 102, 'id must be an Number'))
@@ -51,6 +55,7 @@ router.put('/update/:id', async function (req, res, next) {
 })
 router.delete('/delete/:id', async function (req, res, next) {
   try {
+    await verifyPrivilege('1120200204', req, res)
     let id = req.params.id
     if (/[0-9]+/.test(id)) {
       id = parseInt(id)

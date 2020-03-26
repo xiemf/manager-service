@@ -11,7 +11,7 @@ const userPrivilege = [
   { code: '1020200103', name: '用户管理-更新', parent: '1020200100' },
   { code: '1020200105', name: '用户管理-冻结', parent: '1020200100' },
   { code: '1020200106', name: '用户管理-启用', parent: '1020200100' },
-  { code: '1020200107', name: '用户管理-角色配置', parent: '1020200100' }
+  { code: '1020200107', name: '用户管理-角色配置', parent: '1020200100' },
 ]
 const rolePrivilege = [
   { code: '1020200200', name: '角色管理', parent: '1020200000' },

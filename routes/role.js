@@ -8,6 +8,7 @@ const {
 } = require('../util')
 
 router.get('/page', async function (req, res, next) {
+  await verifyPrivilege('1020200200', req, res)
   let {
     offset = 0,
       limit = 10
@@ -30,6 +31,7 @@ router.get('/list',async function(req,res,next){
 })
 router.post('/create', async function (req, res, next) {
   try {
+    await verifyPrivilege('1020200202', req, res)
     let user = req.body
     let result = await RoleService.create(user)
     res.send(createResult(result, 101, '新增成功'))
@@ -39,6 +41,7 @@ router.post('/create', async function (req, res, next) {
 })
 router.put('/update/:id', async function (req, res, next) {
   try {
+    await verifyPrivilege('1020200203', req, res)
     let id = parseInt(req.params.id)
     if (isNaN(id)) {
       res.status(400).send(createResult('', 102, 'id must be an Number'))
@@ -53,6 +56,7 @@ router.put('/update/:id', async function (req, res, next) {
 })
 router.delete('/delete/:id', async function (req, res, next) {
   try {
+    await verifyPrivilege('1020200204', req, res)
     let id = req.params.id
     if (/[0-9]+/.test(id)) {
       id = parseInt(id)
