@@ -4,6 +4,7 @@ const md5 = require('md5-node')
 const Op = Sequelize.Op
 const { flatData, noRepeatArr } = require('../util/handleData')
 const RoleService = require('./RoleService')
+const PrivilegeService = require('./PrivilegeService')
 
 const TIME_KEYS = []
 module.exports = {
@@ -105,6 +106,10 @@ module.exports = {
   userPrivilege: async id => {
     try {
       let user = await Models.User.findOne({ where: { id }})
+      if(user.dataValues.username === 'admin'){
+        let privilege = await PrivilegeService.list()
+        return privilege.dataValues
+      }
       let roleRes = await user.getRoles()
       let roleIds = roleRes.map(v => v.dataValues.id)
       let rolePrivilegeRes = await RoleService.listByRoleIds(roleIds)
